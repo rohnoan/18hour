@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from './Button'
 import { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
 import { SCHEMES, WORKOUTS } from '../utils/swoldier'
@@ -31,7 +32,30 @@ export default function Generator() {
   function toggleModal(){
     setShowModal(!showModal);
   }
+  function updateMuscles(muscleGroup) {
+    if (muscles.includes(muscleGroup)) {
+        setMuscles(muscles.filter(val => val !== muscleGroup))
+        return
+    }
+
+    if (muscles.length > 3) {
+        return
+    }
+
+    if (poison !== 'individual') {
+        setMuscles([muscleGroup])
+        setShowModal(false)
+        return
+    }
+
+    setMuscles([...muscles, muscleGroup])
+    if (muscles.length === 3) {
+        setShowModal(false)
+    }
+
+}
   return (
+    
     <SectionWrapper header={"generate your workout"} 
     title={['it`s','huge','o`clock']}>
       <Header index={'01'} title={'Pick your poison'} description={'Select the workout you wish to endure'} />
@@ -55,11 +79,23 @@ export default function Generator() {
       <div className='bg-slate-950 py-3 border border-solid border-blue-400 rounded-lg flex flex-col'>
         <button onClick={toggleModal}
         className='relative flex items-center justify-center'>
-          <p>Select Muscle Groups</p>
+           <p className='capitalize'>{muscles.length == 0 ? 'Select muscle groups' : muscles.join(' ')}</p>
           <i className="fa-solid absolute right-3 top-1/2 -translate-y-1/2 fa-caret-down"></i>
         </button>
         {showModal && (
-          <div>modal</div>
+          <div className='flex flex-col px-3 pb-3'>
+            {(poison==='individual' ? WORKOUTS[poison]:Object.keys(WORKOUTS[poison])).map((muscleGroup,muscleGroupIndex)=>{
+              return(
+                <button 
+                onClick={()=>{
+                  updateMuscles(muscleGroup)
+                }}
+                className={'hover:text-blue-400 duration-200 ' + (muscles.includes(muscleGroup) ? ' text-blue-400' : ' ')} key={muscleGroupIndex}>
+                  <p className='uppercase '>{muscleGroup}</p>
+                </button>
+              )
+            })}
+          </div>
         )}
       </div>
       <Header index={'03'} title={'Become Juggernaut'} description={'Select your ultimate objective.'}/>
@@ -77,8 +113,12 @@ export default function Generator() {
         )
       })}
       </div>
-
-      
+      <div className='flex justify-center'>
+      <Button text={"FORMULATE"}/>
+      </div>
+    
     </SectionWrapper>
+    
+  
   )
 }
