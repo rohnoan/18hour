@@ -3,6 +3,7 @@ import Button from './Button'
 import { useState } from 'react'
 import SectionWrapper from './SectionWrapper'
 import { SCHEMES, WORKOUTS } from '../utils/swoldier'
+import Workout from './Workout'
 
 
 function Header(props){
@@ -23,7 +24,7 @@ function Header(props){
 }
 
 export default function Generator(props) {
-  const{muscles,setMuscles,poison,setPoison,goals,setGoals}=props;
+  const{muscles,setMuscles,poison,setPoison,goals,setGoals,updateWorkout}=props;
   const[showModal,setShowModal]=useState(false)
   //let showModal=false;
   function toggleModal(){
@@ -97,7 +98,7 @@ export default function Generator(props) {
       </div>
       <Header index={'03'} title={'Become Juggernaut'} description={'Select your ultimate objective.'}/>
       
-      <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
       {Object.keys(SCHEMES).map((scheme,schemeIndex)=>{
         return(
           <button 
@@ -111,11 +112,10 @@ export default function Generator(props) {
       })}
       </div>
       <div className='flex justify-center'>
-      <Button text={"FORMULATE"}/>
+      <Button func={updateWorkout} text={"FORMULATE"}/>
       </div>
-    
     </SectionWrapper>
     
-  
+    
   )
 }
